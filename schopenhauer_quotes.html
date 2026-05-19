@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Arthur Schopenhauer Quote Generator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      color: #e8e8ef;
+      background: #0c0d12;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background: radial-gradient(circle at top left, rgba(146, 146, 167, 0.16), transparent 24%),
+                  radial-gradient(circle at bottom right, rgba(79, 70, 229, 0.14), transparent 18%),
+                  linear-gradient(180deg, #090a0f 0%, #12151c 100%);
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      color: #ececf2;
+      padding: 1.5rem;
+    }
+    .wrapper {
+      width: min(98vw, 1080px);
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: 2rem;
+      align-items: stretch;
+    }
+    .topbar {
+      position: absolute;
+      top: 1.5rem;
+      left: 1.5rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: rgba(11, 12, 18, 0.88);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 999px;
+      padding: 0.75rem 1rem;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.18);
+      z-index: 10;
+    }
+    .topbar label {
+      font-size: 0.95rem;
+      color: #c8cee3;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+    }
+    .hero-banner {
+      position: absolute;
+      top: 5.5rem;
+      left: 1.5rem;
+      right: 1.5rem;
+      padding: 1.4rem 1.6rem;
+      background: rgba(20, 24, 40, 0.94);
+      border: 1px solid rgba(143, 179, 255, 0.12);
+      border-radius: 24px;
+      box-shadow: 0 24px 50px rgba(0, 0, 0, 0.16);
+      color: #e5ecff;
+      font-size: clamp(1rem, 1.05vw, 1.2rem);
+      line-height: 1.7;
+      z-index: 9;
+      text-align: center;
+    }
+    .hero-banner strong {
+      color: #a8baff;
+    }
+    .language-select {
+      min-width: 180px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 0.75rem 0.9rem;
+      background: rgba(17, 20, 31, 0.96);
+      color: #eef0f8;
+      font-size: 0.95rem;
+      outline: none;
+      cursor: pointer;
+    }
+    .resource-card {
+      display: flex;
+      flex-direction: column;
+      background: rgba(15, 18, 27, 0.96);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 28px;
+      box-shadow: 0 32px 85px rgba(0, 0, 0, 0.35);
+      overflow: hidden;
+      min-height: 520px;
+    }
+    .resource-header {
+      padding: 1.75rem 1.75rem 1rem;
+      background: rgba(11, 13, 21, 0.95);
+    }
+    .resource-title {
+      margin: 0 0 0.75rem;
+      font-size: clamp(1.4rem, 2vw, 1.8rem);
+      color: #f5f7ff;
+      line-height: 1.1;
+    }
+    .resource-link {
+      color: #8fb3ff;
+      text-decoration: none;
+      font-size: 0.95rem;
+      letter-spacing: 0.01em;
+    }
+    .resource-link:hover {
+      text-decoration: underline;
+    }
+    .resource-frame {
+      width: 100%;
+      min-height: 360px;
+      height: 100%;
+      border: none;
+      background: #07080c;
+    }
+    .resource-note {
+      padding: 1rem 1.75rem 1.75rem;
+      color: #8f98ad;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      background: rgba(10, 12, 19, 0.92);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .card {
+      background: rgba(15, 18, 27, 0.96);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 32px;
+      box-shadow: 0 40px 110px rgba(0, 0, 0, 0.4);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 520px;
+    }
+    .content {
+      padding: 3rem 3rem 2.5rem;
+    }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      color: #8f98ad;
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      margin-bottom: 1.25rem;
+    }
+    .eyebrow::before {
+      content: '';
+      display: block;
+      width: 2rem;
+      height: 1px;
+      background: currentColor;
+      opacity: 0.56;
+    }
+    h1 {
+      margin: 0 0 1.5rem;
+      font-size: clamp(2.4rem, 3.3vw, 3.5rem);
+      line-height: 1.02;
+      letter-spacing: -0.06em;
+      color: #f5f5ff;
+    }
+    .quote-text {
+      margin: 0;
+      font-size: clamp(1.15rem, 1.4vw, 1.35rem);
+      line-height: 1.95;
+      color: #d9d8e8;
+      text-align: left;
+      padding-left: 0.7rem;
+      border-left: 3px solid rgba(193, 193, 216, 0.35);
+      letter-spacing: 0.01em;
+      white-space: pre-line;
+    }
+    .promo-text {
+      margin: 1.4rem 0 0;
+      font-size: 1rem;
+      line-height: 1.75;
+      color: #bfc3d6;
+      text-align: left;
+      padding-left: 0.7rem;
+      border-left: 3px solid rgba(143, 179, 255, 0.25);
+      white-space: pre-line;
+    }
+    .original-text {
+      margin: 1.75rem 0 0;
+      font-size: 0.95rem;
+      line-height: 1.8;
+      color: #a3a5b8;
+      text-align: left;
+      padding-left: 0.7rem;
+      border-left: 3px solid rgba(255, 255, 255, 0.08);
+      white-space: pre-line;
+    }
+    .cta {
+      padding: 0 3rem 2.5rem;
+    }
+    .button-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    button {
+      appearance: none;
+      border: none;
+      border-radius: 999px;
+      padding: 1rem 1.9rem;
+      background: linear-gradient(135deg, #4f46e5, #0f172a);
+      color: #f8fafc;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.2s ease;
+      box-shadow: 0 18px 30px rgba(79, 70, 229, 0.25);
+    }
+    button:hover {
+      transform: translateY(-2px);
+      background: linear-gradient(135deg, #6366f1, #111827);
+    }
+    .hint {
+      color: #9ba3b8;
+      font-size: 0.95rem;
+      margin-top: 0.9rem;
+    }
+    .footer-note {
+      padding: 1.5rem 3rem 2.5rem;
+      color: #8f98ad;
+      font-size: 0.95rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .footer-link {
+      margin: 2rem auto 0;
+      max-width: 1080px;
+      text-align: center;
+      font-size: 1rem;
+      color: #9fb8ff;
+    }
+    .footer-link a {
+      color: #c5d4ff;
+      text-decoration: underline;
+    }
+    .contact-small {
+      margin-top: 0.45rem;
+      font-size: 0.85rem;
+      color: #9ba6c9;
+    }
+    .contact-small a {
+      color: #c5d4ff;
+      text-decoration: underline;
+      margin-left: 0.25rem;
+    }
+    @media (max-width: 860px) {
+      .wrapper {
+        grid-template-columns: 1fr;
+      }
+      .resource-card,
+      .card {
+        min-height: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <label for="languageSelect">Language</label>
+    <select id="languageSelect" class="language-select">
+      <option value="en">English</option>
+      <option value="de">Deutsch</option>
+      <option value="nl">Nederlands</option>
+      <option value="fr">Français</option>
+      <option value="es">Español</option>
+      <option value="zh_hans">中文（简体）</option>
+      <option value="zh_hant">中文（繁體）</option>
+    </select>
+  </div>
+  <div class="hero-banner" id="heroBanner">STOP THE BIRTH OF MORE SUFFERING AND PROTECT FUTURE BEINGS FROM AN UNCHOSEN FATE.</div>
+  <div class="wrapper">
+    <div class="resource-card">
+      <div class="resource-header">
+        <p class="resource-title">Reminder of human tragedy</p>
+        <a id="resourceLink" class="resource-link" href="https://en.wikipedia.org/wiki/Nanjing_Massacre" target="_blank" rel="noopener noreferrer">Read on Wikipedia: Nanjing Massacre</a>
+      </div>
+      <iframe id="resourceFrame" class="resource-frame" src="https://en.wikipedia.org/wiki/Nanjing_Massacre" title="Reminder of human tragedy page"></iframe>
+      <div class="resource-note">This panel shows a reminder of human tragedy through selected Wikipedia pages. If the preview fails to load, open the link above.</div>
+    </div>
+    <div class="card">
+      <div class="content">
+        <div class="eyebrow">Arthur Schopenhauer</div>
+        <h1>Existential wisdom in every quote</h1>
+        <p id="quote" class="quote-text"></p>
+        <p id="promoText" class="promo-text"></p>
+        <p id="originalText" class="original-text"></p>
+      </div>
+      <div class="cta">
+        <div class="button-row">
+          <button id="newQuoteButton" type="button">Regenerate quote</button>
+          <button id="newResourceButton" type="button">New tragic page</button>
+          <div class="hint">Press Enter to regenerate quote.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-link" id="footerLink">
+    <a id="groupLink" href="https://antinatalistadvocacy.org/" target="_blank" rel="noopener noreferrer">Find an anti-natalist group in your language</a>
+    <div class="contact-small">Contact: <a href="mailto:greenandgentle@protonmail.com">greenandgentle@protonmail.com</a> · <a href="https://instagram.com/greenandgentle" target="_blank" rel="noopener noreferrer">@greenandgentle</a></div>
+  </div>
+  <script>
+    const quotes = [
+      {
+        de: "Talent trifft ein Ziel, das niemand sonst treffen kann; Genie trifft ein Ziel, das niemand sonst sehen kann.",
+        en: "Talent hits a target no one else can hit; genius hits a target no one else can see.",
+        fr: "Le talent atteint une cible que personne d'autre ne peut atteindre ; le génie atteint une cible que personne d'autre ne peut voir.",
+        es: "El talento alcanza un objetivo que nadie más puede alcanzar; el genio alcanza un objetivo que nadie más puede ver.",
+        nl: "Talent raakt een doel dat niemand anders kan raken; genialiteit raakt een doel dat niemand anders kan zien.",
+        zh_hans: "天赋击中的是别人无法击中的目标；天才击中的是别人无法看见的目标。",
+        zh_hant: "天賦擊中的是別人無法擊中的目標；天才擊中的是別人無法看見的目標。"
+      },
+      {
+        de: "Ein Mensch kann tun, was er will, aber nicht wollen, was er will.",
+        en: "A man can do what he wants, but not want what he wants.",
+        fr: "Un homme peut faire ce qu'il veut, mais pas vouloir ce qu'il veut.",
+        es: "Un hombre puede hacer lo que quiere, pero no querer lo que quiere.",
+        nl: "Een mens kan doen wat hij wil, maar niet willen wat hij wil.",
+        zh_hans: "一个人可以做他想做的事，但不能想要他想要的东西。",
+        zh_hant: "一個人可以做他想做的事，但不能想要他想要的東西。"
+      },
+      {
+        de: "Wer für Narren schreibt, hat immer ein großes Publikum sicher.",
+        en: "The person who writes for fools is always sure of a large audience.",
+        fr: "Celui qui écrit pour les imbéciles est sûr d'avoir un grand public.",
+        es: "La persona que escribe para tontos siempre está segura de tener un gran público.",
+        nl: "Degene die voor dwazen schrijft, is altijd zeker van een groot publiek.",
+        zh_hans: "为傻瓜写字的人，总是能确保有大量观众。",
+        zh_hant: "為傻瓜寫字的人，總是能確保有大量觀眾。"
+      },
+      {
+        de: "Mitgefühl ist die Grundlage der Moral.",
+        en: "Compassion is the basis of morality.",
+        fr: "La compassion est à la base de la moralité.",
+        es: "La compasión es la base de la moralidad.",
+        nl: "Mededogen is de basis van moraliteit.",
+        zh_hans: "同情是道德的基础。",
+        zh_hant: "同情是道德的基礎。"
+      },
+      {
+        de: "Es ist schwer, Glück in sich selbst zu finden, aber unmöglich, es anderswo zu finden.",
+        en: "It is difficult to find happiness within oneself, but it is impossible to find it anywhere else.",
+        fr: "Il est difficile de trouver le bonheur en soi, mais il est impossible de le trouver ailleurs.",
+        es: "Es difícil encontrar la felicidad dentro de uno mismo, pero es imposible encontrarla en otro lugar.",
+        nl: "Het is moeilijk geluk in jezelf te vinden, maar onmogelijk het ergens anders te vinden.",
+        zh_hans: "在自身内找到幸福很难，但在别处找到它是不可能的。",
+        zh_hant: "在自身內找到幸福很難，但在別處找到它是不可能的。"
+      },
+      {
+        de: "Die Entdeckung der Wahrheit wird nicht so sehr durch den falschen Schein der Gegenwart verhindert, der ins Irrtum führt, sondern durch vorgefasste Meinungen, durch Vorurteile.",
+        en: "The discovery of truth is prevented more effectively, not by the false appearance of things present and which mislead into error, but by preconceived opinion, by prejudice.",
+        fr: "La découverte de la vérité est empêchée plus efficacement, non par la fausse apparence des choses présentes qui égare en erreur, mais par l'opinion préconçue, par le préjugé.",
+        es: "El descubrimiento de la verdad se impide más eficazmente, no por la apariencia falsa de las cosas presentes que engañan hacia el error, sino por la opinión preconcebida, por el prejuicio.",
+        nl: "De ontdekking van de waarheid wordt effectiever verhinderd, niet door het valse voorkomen van aanwezige dingen dat in dwaling leidt, maar door vooropgezette mening, door vooroordeel.",
+        zh_hans: "真理的发现更有效地被阻止的，不是被眼前事物的虚假外观误导，而是被先入为主的看法、偏见阻碍。",
+        zh_hant: "真理的發現更有效地被阻止的，不是被眼前事物的虛假外觀誤導，而是被先入為主的看法、偏見阻礙。"
+      },
+      {
+        de: "Wer starr an seinen eigenen Ideen hängt, ist der größte Feind der Wahrheit.",
+        en: "The person who is stubbornly attached to his own ideas is the greatest enemy of truth.",
+        fr: "La personne qui s'accroche obstinément à ses propres idées est le plus grand ennemi de la vérité.",
+        es: "Quien se aferra obstinadamente a sus propias ideas es el mayor enemigo de la verdad.",
+        nl: "Degene die koppig aan zijn eigen ideeën vasthoudt, is de grootste vijand van de waarheid.",
+        zh_hans: "固执地坚持自己想法的人是真理的最大敌人。",
+        zh_hant: "固執地堅持自己想法的人是真理的最大敵人。"
+      },
+      {
+        de: "Um Großes zu vollbringen, müssen wir nicht nur handeln, sondern auch träumen; nicht nur planen, sondern auch glauben.",
+        en: "To accomplish great things, we must not only act, but also dream; not only plan, but also believe.",
+        fr: "Pour accomplir de grandes choses, nous devons non seulement agir, mais aussi rêver; non seulement planifier, mais aussi croire.",
+        es: "Para lograr grandes cosas, no sólo debemos actuar, sino también soñar; no sólo planear, sino también creer.",
+        nl: "Om grote dingen te bereiken, moeten we niet alleen handelen, maar ook dromen; niet alleen plannen, maar ook geloven.",
+        zh_hans: "要成就伟大的事业，我们不仅要行动，还要梦想；不仅要计划，还要相信。",
+        zh_hant: "要成就偉大的事業，我們不僅要行動，還要夢想；不僅要計劃，還要相信。"
+      },
+      {
+        de: "Humor ist ein Sinn für Proportion.",
+        en: "A sense of humor is a sense of proportion.",
+        fr: "Un sens de l'humour est un sens des proportions.",
+        es: "Un sentido del humor es un sentido de la proporción.",
+        nl: "Een gevoel voor humor is een gevoel voor proportie.",
+        zh_hans: "幽默感是一种比例感。",
+        zh_hant: "幽默感是一種比例感。"
+      },
+      {
+        de: "Jeder Mensch hält die Grenzen seines eigenen Gesichtsfeldes für die Grenzen der Welt.",
+        en: "Every man takes the limits of his own field of vision for the limits of the world.",
+        fr: "Chaque homme prend les limites de son propre champ de vision pour les limites du monde.",
+        es: "Cada hombre toma los límites de su propio campo de visión por los límites del mundo.",
+        nl: "Iedereen neemt de grenzen van zijn eigen gezichtsveld voor de grenzen van de wereld.",
+        zh_hans: "每个人都把自己视野的边界当成世界的边界。",
+        zh_hant: "每個人都把自己視野的邊界當成世界的邊界。"
+      }
+    ];
+
+    const tragedyPages = [
+      {
+        titles: {
+          en: 'Nanjing Massacre',
+          de: 'Massaker von Nanking',
+          fr: 'Massacre de Nankin',
+          es: 'Masacre de Nankín',
+          nl: 'Bloedbad van Nanking',
+          zh_hans: '南京大屠杀',
+          zh_hant: '南京大屠殺'
+        },
+        urls: {
+          en: 'https://en.wikipedia.org/wiki/Nanjing_Massacre',
+          de: 'https://de.wikipedia.org/wiki/Nanking-Massaker',
+          fr: 'https://fr.wikipedia.org/wiki/Massacre_de_Nankin',
+          es: 'https://es.wikipedia.org/wiki/Masacre_de_Nank%C3%ADn',
+          nl: 'https://nl.wikipedia.org/wiki/Slachting_van_Nanking',
+          zh_hans: 'https://zh.wikipedia.org/wiki/南京大屠杀',
+          zh_hant: 'https://zh.wikipedia.org/wiki/南京大屠殺'
+        }
+      },
+      {
+        titles: {
+          en: 'Holocaust',
+          de: 'Holocaust',
+          fr: 'Holocauste',
+          es: 'Holocausto',
+          nl: 'Holocaust',
+          zh_hans: '大屠杀',
+          zh_hant: '大屠殺'
+        },
+        urls: {
+          en: 'https://en.wikipedia.org/wiki/The_Holocaust',
+          de: 'https://de.wikipedia.org/wiki/Holocaust',
+          fr: 'https://fr.wikipedia.org/wiki/Holocauste',
+          es: 'https://es.wikipedia.org/wiki/Holocausto',
+          nl: 'https://nl.wikipedia.org/wiki/Holocaust',
+          zh_hans: 'https://zh.wikipedia.org/wiki/大屠殺',
+          zh_hant: 'https://zh.wikipedia.org/wiki/大屠殺'
+        }
+      },
+      {
+        titles: {
+          en: 'Armenian Genocide',
+          de: 'Armenischer Völkermord',
+          fr: 'Génocide arménien',
+          es: 'Genocidio armenio',
+          nl: 'Armeens-genocide',
+          zh_hans: '亚美尼亚种族灭绝',
+          zh_hant: '亞美尼亞種族滅絕'
+        },
+        urls: {
+          en: 'https://en.wikipedia.org/wiki/Armenian_Genocide',
+          de: 'https://de.wikipedia.org/wiki/Armenischer_V%C3%B6lkermord',
+          fr: 'https://fr.wikipedia.org/wiki/Le_g%C3%A9nocide_arm%C3%A9nien',
+          es: 'https://es.wikipedia.org/wiki/Genocidio_armenio',
+          nl: 'https://nl.wikipedia.org/wiki/Armeens_genocide',
+          zh_hans: 'https://zh.wikipedia.org/wiki/亚美尼亚种族灭绝',
+          zh_hant: 'https://zh.wikipedia.org/wiki/亞美尼亞種族滅絕'
+        }
+      },
+      {
+        titles: {
+          en: 'Rwandan Genocide',
+          de: 'Völkermord in Ruanda',
+          fr: 'Génocide rwandais',
+          es: 'Genocidio de Ruanda',
+          nl: 'Genocide in Rwanda',
+          zh_hans: '卢旺达种族灭绝',
+          zh_hant: '盧安達種族滅絕'
+        },
+        urls: {
+          en: 'https://en.wikipedia.org/wiki/Rwandan_Genocide',
+          de: 'https://de.wikipedia.org/wiki/V%C3%B6lkermord_in_Ruanda',
+          fr: 'https://fr.wikipedia.org/wiki/Genocide_rwandais',
+          es: 'https://es.wikipedia.org/wiki/Genocidio_de_Ruanda',
+          nl: 'https://nl.wikipedia.org/wiki/Genocide_in_Rwanda',
+          zh_hans: 'https://zh.wikipedia.org/wiki/卢旺达种族灭绝',
+          zh_hant: 'https://zh.wikipedia.org/wiki/盧安達種族滅絕'
+        }
+      },
+      {
+        titles: {
+          en: 'Srebrenica Massacre',
+          de: 'Massaker von Srebrenica',
+          fr: 'Massacre de Srebrenica',
+          es: 'Masacre de Srebrenica',
+          nl: 'Slachting van Srebrenica',
+          zh_hans: '斯雷布雷尼察大屠杀',
+          zh_hant: '斯雷布雷尼察大屠殺'
+        },
+        urls: {
+          en: 'https://en.wikipedia.org/wiki/Srebrenica_massacre',
+          de: 'https://de.wikipedia.org/wiki/Massaker_von_Srebrenica',
+          fr: 'https://fr.wikipedia.org/wiki/Massacre_de_Srebrenica',
+          es: 'https://es.wikipedia.org/wiki/Masacre_de_Srebrenica',
+          nl: 'https://nl.wikipedia.org/wiki/Slachting_van_Srebrenica',
+          zh_hans: 'https://zh.wikipedia.org/wiki/斯雷布雷尼察大屠杀',
+          zh_hant: 'https://zh.wikipedia.org/wiki/斯雷布雷尼察大屠殺'
+        }
+      },
+      {
+        titles: {
+          en: 'Bhopal Disaster',
+          de: 'Bhopal-Katastrophe',
+          fr: 'Catastrophe de Bhopal',
+          es: 'Catástrofe de Bhopal',
+          nl: 'Bhopalramp',
+          zh_hans: '博帕尔灾难',
+          zh_hant: '博帕爾災難'
+        },
+        urls: {
+          en: 'https://en.wikipedia.org/wiki/Bhopal_disaster',
+          de: 'https://de.wikipedia.org/wiki/Bhopal-Katastrophe',
+          fr: 'https://fr.wikipedia.org/wiki/Catastrophe_de_Bhopal',
+          es: 'https://es.wikipedia.org/wiki/Catastrofe_de_Bhopal',
+          nl: 'https://nl.wikipedia.org/wiki/Bhopalramp',
+          zh_hans: 'https://zh.wikipedia.org/wiki/博帕尔灾难',
+          zh_hant: 'https://zh.wikipedia.org/wiki/博帕爾災難'
+        }
+      },
+      {
+        titles: {
+          en: '2010 Haiti Earthquake',
+          de: 'Erdbeben in Haiti 2010',
+          fr: "Séisme d'Haïti de 2010",
+          es: 'Terremoto de Haití de 2010',
+          nl: 'Aardbeving in Haïti 2010',
+          zh_hans: '2010年海地地震',
+          zh_hant: '2010年海地地震'
+        },
+        urls: {
+          en: 'https://en.wikipedia.org/wiki/2010_Haiti_earthquake',
+          de: 'https://de.wikipedia.org/wiki/Erdbeben_in_Haiti_2010',
+          fr: "https://fr.wikipedia.org/wiki/S%C3%A9isme_d%27Ha%C3%AFti_de_2010",
+          es: 'https://es.wikipedia.org/wiki/Terremoto_de_Haití_de_2010',
+          nl: 'https://nl.wikipedia.org/wiki/Aardbeving_in_Haïti_2010',
+          zh_hans: 'https://zh.wikipedia.org/wiki/2010年海地地震',
+          zh_hant: 'https://zh.wikipedia.org/wiki/2010年海地地震'
+        }
+      }
+    ];
+
+    const quoteElement = document.getElementById('quote');
+    const promoText = document.getElementById('promoText');
+    const heroBanner = document.getElementById('heroBanner');
+    const originalText = document.getElementById('originalText');
+    const button = document.getElementById('newQuoteButton');
+    const newResourceButton = document.getElementById('newResourceButton');
+    const languageSelect = document.getElementById('languageSelect');
+    const resourceLink = document.getElementById('resourceLink');
+    const resourceFrame = document.getElementById('resourceFrame');
+    const groupLink = document.getElementById('groupLink');
+    let currentLanguage = languageSelect.value;
+    let currentQuote = null;
+    let currentQuoteIndex = 0;
+
+    const quotePromoMessages = [
+      {
+        en: 'Talent and genius still live in a world of suffering; Schopenhauer would say this insight makes avoiding future births an act of mercy.',
+        de: 'Talent und Genie leben dennoch in einer Welt des Leidens; Schopenhauer würde sagen, dass diese Einsicht das Vermeiden zukünftiger Geburten zu einem Akt der Barmherzigkeit macht.',
+        fr: 'Le talent et le génie vivent toujours dans un monde de souffrance ; Schopenhauer dirait que cette lucidité fait de l&apos;évitement des naissances futures un acte de miséricorde.',
+        es: 'El talento y el genio siguen viviendo en un mundo de sufrimiento; Schopenhauer diría que esta claridad convierte evitar nacimientos futuros en un acto de misericordia.',
+        nl: 'Talent en genialiteit leven nog steeds in een wereld van lijden; Schopenhauer zou zeggen dat dit inzicht het vermijden van toekomstige geboorten tot een daad van mededogen maakt.',
+        zh_hans: '天赋与天才仍生活在痛苦世界中；叔本华会说，这种觉察使避免未来出生成为怜悯的行为。',
+        zh_hant: '天賦與天才仍生活在痛苦世界中；叔本華會說，這種覺察使避免未來出生成為憐憫的行為。'
+      },
+      {
+        en: 'The will is not free and desire causes endless suffering; Schopenhauer would urge that the kindest choice is to prevent more wills from arising.',
+        de: 'Der Wille ist nicht frei und Verlangen verursacht endloses Leiden; Schopenhauer würde sagen, die freundlichste Wahl sei, mehr Wille gar nicht erst entstehen zu lassen.',
+        fr: 'La volonté n&apos;est pas libre et le désir engendre une souffrance sans fin ; Schopenhauer dirait que le plus doux choix est d&apos;empêcher plus de volontés d&apos;émerger.',
+        es: 'La voluntad no es libre y el deseo causa sufrimiento infinito; Schopenhauer diría que la elección más amable es impedir que surjan más voluntades.',
+        nl: 'De wil is niet vrij en verlangen veroorzaakt eindeloos lijden; Schopenhauer zou zeggen dat de vriendelijkste keuze is om te voorkomen dat er meer willen ontstaan.',
+        zh_hans: '意志并非自由，欲望带来无尽痛苦；叔本华会说，最仁慈的选择是阻止更多意志的出现。',
+        zh_hant: '意志並非自由，慾望帶來無盡痛苦；叔本華會說，最仁慈的選擇是阻止更多意志的出現。'
+      },
+      {
+        en: 'A crowd of fools shows the cruelty of the world; Schopenhauer would see anti-natalism as the compassion that spares future minds from the same spectacle.',
+        de: 'Eine Menge Narren zeigt die Grausamkeit der Welt; Schopenhauer sähe im Antinatalismus das Mitgefühl, das künftige Geister vor demselben Schauspiel bewahrt.',
+        fr: 'Une foule de fous montre la cruauté du monde ; Schopenhauer verrait dans l&apos;antinatalisme la compassion qui épargne aux esprits futurs le même spectacle.',
+        es: 'Una multitud de tontos muestra la crueldad del mundo; Schopenhauer vería el antinatalismo como la compasión que ahorra a futuras mentes el mismo espectáculo.',
+        nl: 'Een menigte dwazen toont de wreedheid van de wereld; Schopenhauer zou antinatalisme zien als het mededogen dat toekomstige geesten spaart voor hetzelfde schouwspel.',
+        zh_hans: '一群愚者展示了世界的残酷；叔本华会认为反出生主义是怜悯，让未来的心灵免受相同景象的折磨。',
+        zh_hant: '一群愚者展示了世界的殘酷；叔本華會認為反出生主義是憐憫，讓未來的心靈免受相同景象的折磨。'
+      },
+      {
+        en: 'Compassion is morality; Schopenhauer would argue the most moral choice is to prevent new lives from falling into inevitable suffering.',
+        de: 'Mitgefühl ist Moral; Schopenhauer würde argumentieren, die moralischste Wahl sei, neue Leben davor zu bewahren, in unvermeidliches Leiden zu stürzen.',
+        fr: 'La compassion est la morale ; Schopenhauer dirait que le choix le plus moral est d&apos;empêcher de nouvelles vies de tomber dans une souffrance inévitable.',
+        es: 'La compasión es la moral; Schopenhauer diría que la elección más moral es impedir que nuevas vidas caigan en sufrimiento inevitable.',
+        nl: 'Mededogen is moraliteit; Schopenhauer zou zeggen dat de meest morele keuze is om nieuwe levens te behoeden voor onvermijdelijk lijden.',
+        zh_hans: '同情就是道德；叔本华会认为，最道德的选择是阻止新生命陷入不可避免的痛苦。',
+        zh_hant: '同情就是道德；叔本華會認為，最道德的選擇是阻止新生命陷入不可避免的痛苦。'
+      },
+      {
+        en: 'Seeking happiness elsewhere is impossible and painful; Schopenhauer would say the kinder act is to not create more lives that must chase an unreachable joy.',
+        de: 'Glück anderswo zu suchen ist unmöglich und schmerzhaft; Schopenhauer würde sagen, die freundlichere Tat sei, nicht mehr Leben zu schaffen, die einer unerreichbaren Freude nachjagen.',
+        fr: 'Chercher le bonheur ailleurs est impossible et douloureux ; Schopenhauer dirait que l&apos;acte le plus bienveillant est de ne pas créer davantage de vies qui poursuivent une joie inatteignable.',
+        es: 'Buscar la felicidad en otra parte es imposible y doloroso; Schopenhauer diría que el acto más amable es no crear más vidas que persigan una alegría inalcanzable.',
+        nl: 'Geluk elders zoeken is onmogelijk en pijnlijk; Schopenhauer zou zeggen dat de vriendelijkste daad is om niet meer levens te creëren die een onbereikbare vreugde najagen.',
+        zh_hans: '在他处寻找幸福既不可能又痛苦；叔本华会说，更仁慈的行为是不创造更多必须追逐不可及喜悦的生命。',
+        zh_hant: '在他處尋找幸福既不可能又痛苦；叔本華會說，更仁慈的行為是不創造更多必須追逐不可及喜悅的生命。'
+      },
+      {
+        en: 'Truth is blocked by prejudice; Schopenhauer believed honest pessimism shows that preventing new births is more truthful than pretending life is good.',
+        de: 'Wahrheit wird durch Vorurteile blockiert; Schopenhauer glaubte, ehrlicher Pessimismus zeige, dass das Verhindern neuer Geburten ehrlicher ist als vorzugeben, das Leben sei gut.',
+        fr: 'La vérité est bloquée par les préjugés ; Schopenhauer croyait qu&apos;un pessimisme honnête montre qu&apos;empêcher de nouvelles naissances est plus vrai que prétendre que la vie est bonne.',
+        es: 'La verdad se bloquea por prejuicios; Schopenhauer creía que el pesimismo honesto muestra que prevenir nuevos nacimientos es más verdadero que fingir que la vida es buena.',
+        nl: 'Waarheid wordt geblokkeerd door vooroordelen; Schopenhauer geloofde dat eerlijk pessimisme laat zien dat het voorkomen van nieuwe geboorten waarachtiger is dan doen alsof het leven goed is.',
+        zh_hans: '真理被偏见遮蔽；叔本华认为，诚实的悲观表明，防止新的出生比假装生活美好更真实。',
+        zh_hant: '真理被偏見遮蔽；叔本華認為，誠實的悲觀表明，防止新的出生比假裝生活美好更真實。'
+      },
+      {
+        en: 'Attachment to ideas becomes suffering; Schopenhauer would say the compassionate response is to refrain from creating more minds bound to the same pain.',
+        de: 'Anhaften an Ideen wird zum Leiden; Schopenhauer würde sagen, die mitfühlende Antwort sei, davon abzusehen, weitere Geister zu schaffen, die an dasselbe Leid gebunden sind.',
+        fr: 'L&apos;attachement aux idées devient souffrance ; Schopenhauer dirait que la réponse compatissante est de s&apos;abstenir de créer d&apos;autres esprits liés à la même douleur.',
+        es: 'El apego a las ideas se convierte en sufrimiento; Schopenhauer diría que la respuesta compasiva es abstenerse de crear más mentes atadas al mismo dolor.',
+        nl: 'Hechting aan ideeën wordt lijden; Schopenhauer zou zeggen dat de meelevende reactie is om af te zien van het creëren van meer geesten die aan dezelfde pijn vastzitten.',
+        zh_hans: '执着于观念会成为痛苦；叔本华会说，慈悲的回应是不创造更多被同样痛苦束缚的心灵。',
+        zh_hant: '執著於觀念會成為痛苦；叔本華會說，慈悲的回應是不創造更多被同樣痛苦束縛的心靈。'
+      },
+      {
+        en: 'Great action and dreaming still exist in painful life; Schopenhauer would say the bravest dream is to stop adding more suffering by preventing future births.',
+        de: 'Großes Handeln und Träumen existieren dennoch im schmerzhaften Leben; Schopenhauer würde sagen, der mutigste Traum sei, weiteres Leiden durch das Verhindern künftiger Geburten zu stoppen.',
+        fr: 'La grande action et le rêve existent toujours dans une vie douloureuse ; Schopenhauer dirait que le rêve le plus courageux est d&apos;arrêter d&apos;ajouter de la souffrance en empêchant les naissances futures.',
+        es: 'La gran acción y el sueño existen aún en la vida dolorosa; Schopenhauer diría que el sueño más valiente es dejar de añadir más sufrimiento impidiendo nacimientos futuros.',
+        nl: 'Grote actie en dromen bestaan nog steeds in een pijnlijk leven; Schopenhauer zou zeggen dat de dapperste droom is om meer lijden te stoppen door toekomstige geboorten te voorkomen.',
+        zh_hans: '伟大的行动与梦想仍存在于痛苦的生命中；叔本华会说，最勇敢的梦想是通过阻止未来的出生来停止更多痛苦。',
+        zh_hant: '偉大的行動與夢想仍存在於痛苦的生命中；叔本華會說，最勇敢的夢想是通過阻止未來的出生來停止更多痛苦。'
+      },
+      {
+        en: 'A sense of humor is a sense of proportion; Schopenhauer would say real wisdom is seeing life&apos;s suffering and choosing not to add even more to it.',
+        de: 'Humor ist ein Sinn für Proportion; Schopenhauer würde sagen, echte Weisheit ist, das Leiden des Lebens zu sehen und sich zu entscheiden, nicht noch mehr hinzuzufügen.',
+        fr: 'L&apos;humour est un sens de la proportion ; Schopenhauer dirait que la vraie sagesse est de voir la souffrance de la vie et de choisir de ne pas y ajouter davantage.',
+        es: 'El sentido del humor es un sentido de la proporción; Schopenhauer diría que la verdadera sabiduría es ver el sufrimiento de la vida y elegir no añadirle más.',
+        nl: 'Humor is een gevoel voor proportie; Schopenhauer zou zeggen dat echte wijsheid is het lijden van het leven te zien en te kiezen er niet nog meer aan toe te voegen.',
+        zh_hans: '幽默是一种比例感；叔本华会说，真正的智慧是看到生命的痛苦并选择不再增加更多。',
+        zh_hant: '幽默是一種比例感；叔本華會說，真正的智慧是看到生命的痛苦並選擇不再增加更多。'
+      },
+      {
+        en: 'The limits of your world reveal common suffering; Schopenhauer would call preventing new lives an act of empathy toward all future beings trapped within those limits.',
+        de: 'Die Grenzen deiner Welt zeigen das gemeinsame Leiden; Schopenhauer würde das Verhindern neuer Leben als einen Akt der Empathie gegenüber allen zukünftigen Wesen nennen, die innerhalb dieser Grenzen gefangen sind.',
+        fr: 'Les limites de ton monde révèlent la souffrance commune ; Schopenhauer appellerait l&apos;empêchement de nouvelles vies un acte d&apos;empathie envers tous les êtres futurs pris dans ces limites.',
+        es: 'Los límites de tu mundo revelan el sufrimiento común; Schopenhauer llamaría al prevenir nuevas vidas un acto de empatía hacia todos los seres futuros atrapados dentro de esos límites.',
+        nl: 'De grenzen van je wereld onthullen gemeenschappelijk lijden; Schopenhauer zou het voorkomen van nieuwe levens een daad van empathie noemen tegenover alle toekomstige wezens gevangen binnen die grenzen.',
+        zh_hans: '你世界的边界揭示了共同的痛苦；叔本华会称防止新生命为对所有未来被困于这些边界中的生命的同理心行为。',
+        zh_hant: '你世界的邊界揭示了共同的痛苦；叔本華會稱防止新生命為對所有未來被困於這些邊界中的生命的同理心行為。'
+      }
+    ];
+    
+    const heroMessages = {
+      en: 'STOP THE BIRTH OF MORE SUFFERING AND PROTECT FUTURE BEINGS FROM AN UNCHOSEN FATE.',
+      de: 'Eine starke antinatalistische Botschaft: Stoppe die Geburt weiteren Leidens und schütze zukünftige Wesen vor einem ungefragten Schicksal.',
+      fr: 'Un message antinataliste fort : arrêtez la naissance de nouvelles souffrances et protégez les futurs êtres d&apos;un destin non consenti.',
+      es: 'Un mensaje antinatalista fuerte: detén el nacimiento de más sufrimiento y protege a los futuros seres de un destino no elegido.',
+      nl: 'Een krachtige antinatalistische boodschap: stop de geboorte van meer lijden en bescherm toekomstige wezens tegen een ongevraagd lot.',
+      zh_hans: '一个强烈的反出生主义信息：阻止更多痛苦的诞生，保护未来生命免受不被选择的命运。',
+      zh_hant: '一個強烈的反出生主義信息：阻止更多痛苦的誕生，保護未來生命免受不被選擇的命運。'
+    };
+
+    const groupLinks = {
+      en: { url: 'https://antinatalistadvocacy.org/', text: 'Find an anti-natalist group in your language' },
+      de: { url: 'https://antinatalistadvocacy.org/', text: 'Finde eine antinatalistische Gruppe in deiner Sprache' },
+      fr: { url: 'https://antinatalistadvocacy.org/', text: 'Trouvez un groupe antinataliste dans votre langue' },
+      es: { url: 'https://antinatalistadvocacy.org/', text: 'Encuentra un grupo antinatalista en tu idioma' },
+      nl: { url: 'https://antinatalistadvocacy.org/', text: 'Vind een antinatalist groep in jouw taal' },
+      zh_hans: { url: 'https://antinatalistadvocacy.org/', text: '在您的语言中查找反出生主义团体' },
+      zh_hant: { url: 'https://antinatalistadvocacy.org/', text: '在您的語言中查找反出生主義團體' },
+      fallback: { url: 'https://antinatalistadvocacy.org/', text: 'Antinatalist Advocacy' }
+    };
+
+    function getRandomQuote() {
+      currentQuoteIndex = Math.floor(Math.random() * quotes.length);
+      return quotes[currentQuoteIndex];
+    }
+
+    function getRandomResource() {
+      return tragedyPages[Math.floor(Math.random() * tragedyPages.length)];
+    }
+
+    function showQuote() {
+      currentQuote = getRandomQuote();
+      const selectedLanguage = currentLanguage;
+      quoteElement.textContent = currentQuote[selectedLanguage] || currentQuote.en;
+      const promo = quotePromoMessages[currentQuoteIndex] || quotePromoMessages[0];
+      promoText.textContent = promo[selectedLanguage] || promo.en;
+      heroBanner.textContent = heroMessages[selectedLanguage] || heroMessages.en;
+      originalText.textContent = `Original (Deutsch): ${currentQuote.de}`;
+      showResource();
+      const group = groupLinks[selectedLanguage] || groupLinks.en;
+      groupLink.href = group.url;
+      groupLink.textContent = group.text;
+    }
+
+    function showResource() {
+      const page = getRandomResource();
+      const selectedLanguage = currentLanguage;
+      const title = page.titles[selectedLanguage] || page.titles.en;
+      let url = page.urls[selectedLanguage] || page.urls.en;
+      if (url.includes('zh.wikipedia.org/wiki/')) {
+        const variant = selectedLanguage === 'zh_hant' ? 'zh-hant' : selectedLanguage === 'zh_hans' ? 'zh-cn' : null;
+        if (variant) {
+          url += url.includes('?') ? `&variant=${variant}` : `?variant=${variant}`;
+        }
+      }
+      resourceLink.href = url;
+      resourceLink.textContent = `Read on Wikipedia: ${title}`;
+      resourceFrame.src = url;
+    }
+
+    button.addEventListener('click', showQuote);
+    newResourceButton.addEventListener('click', showResource);
+    languageSelect.addEventListener('change', event => {
+      currentLanguage = event.target.value;
+      showQuote();
+    });
+    window.addEventListener('keydown', event => {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        showQuote();
+      }
+    });
+
+    showQuote();
+    showResource();
+  </script>
+</body>
+</html>
